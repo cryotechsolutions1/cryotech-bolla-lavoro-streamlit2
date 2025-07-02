@@ -91,13 +91,14 @@ if st.button("Genera PDF"):
     pdf.cell(200, 10, txt=f"FIRMA TECNICO: {firma_tecnico}", ln=True)
     pdf.cell(200, 10, txt=f"FIRMA E TIMBRO CLIENTE: {firma_cliente}", ln=True)
 
-    # SOLUZIONE COMPATIBILE STREAMLIT CLOUD
-    pdf_buffer = pdf.output(dest="S").encode("latin-1")
+    # ✅ CORRETTO: Creazione PDF in formato stringa per Streamlit Cloud
+    pdf_data = pdf.output(dest="S").encode("latin-1")
+
     st.success("PDF generato con successo!")
 
     st.download_button(
         label="Scarica PDF",
-        data=pdf_buffer,
+        data=pdf_data,
         file_name="bolla_di_lavoro.pdf",
         mime="application/pdf"
     )
