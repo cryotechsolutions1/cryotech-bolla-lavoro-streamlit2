@@ -93,9 +93,9 @@ if st.button("Genera PDF"):
     pdf.cell(200, 10, txt=f"FIRMA TECNICO: {firma_tecnico}", ln=True)
     pdf.cell(200, 10, txt=f"FIRMA E TIMBRO CLIENTE: {firma_cliente}", ln=True)
 
-    pdf_output = io.BytesIO()
-    pdf.output(pdf_output)
-    pdf_output.seek(0)
+    # Generazione PDF come bytes compatibile Streamlit
+pdf_bytes = pdf.output(dest="S").encode("latin1")
+pdf_output = io.BytesIO(pdf_bytes)
 
     st.success("PDF generato con successo!")
 
