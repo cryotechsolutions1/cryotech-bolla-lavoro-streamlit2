@@ -3,7 +3,7 @@ from fpdf import FPDF
 import datetime
 import os
 
-st.title("Cryotech Solutions Srls")
+st.title("Cryotech - Bolla di Lavoro")
 
 numero = st.text_input("Numero")
 data = st.date_input("Data", datetime.date.today())
@@ -86,17 +86,18 @@ if st.button("Genera PDF"):
 
     pdf.ln(10)
     pdf.multi_cell(0, 10, txt=f"NOTE:\n{note}")
-
     pdf.ln(10)
     pdf.cell(200, 10, txt=f"FIRMA TECNICO: {firma_tecnico}", ln=True)
-    pdf.cell(200, 10, txt=f"FIRMA E TIMBRO CLIENTE: {firma_cliente}", ln=
-    # Generazione PDF come stringa per download
-pdf_data = pdf.output(dest="S").encode("latin-1")
+    pdf.cell(200, 10, txt=f"FIRMA E TIMBRO CLIENTE: {firma_cliente}", ln=True)
 
-# Download button diretto con i dati
-st.download_button(
-    label="Scarica PDF",
-    data=pdf_data,
-    file_name="bolla_di_lavoro.pdf",
-    mime="application/pdf"
-)
+    # ✅ Creazione PDF come stringa per Streamlit Cloud
+    pdf_data = pdf.output(dest="S").encode("latin-1")
+
+    st.success("PDF generato con successo!")
+
+    st.download_button(
+        label="Scarica PDF",
+        data=pdf_data,
+        file_name="bolla_di_lavoro.pdf",
+        mime="application/pdf"
+    )
