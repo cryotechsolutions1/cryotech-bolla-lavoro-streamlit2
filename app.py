@@ -65,14 +65,14 @@ for i in range(int(num_materiali)):
 note = st.text_area("Note")
 
 st.header("Firma Tecnico")
-uploaded_firma_tecnico = st.file_uploader("Carica immagine firma tecnico", type=["png", "jpg"])
+uploaded_firma_tecnico = st.file_uploader("Carica immagine firma tecnico", type=["png", "jpg"], key="upload_tecnico")
 st.text("Oppure firma tracciata sotto:")
-canvas_tecnico = st_canvas(height=150, width=300, drawing_mode="freedraw", stroke_width=2, key="firma_tecnico_canvas")
+canvas_tecnico = st_canvas(height=150, width=300, drawing_mode="freedraw", stroke_width=2, key="canvas_firma_tecnico")
 
 st.header("Firma Cliente")
-uploaded_firma_cliente = st.file_uploader("Carica immagine firma cliente", type=["png", "jpg"])
+uploaded_firma_cliente = st.file_uploader("Carica immagine firma cliente", type=["png", "jpg"], key="upload_cliente")
 st.text("Oppure firma tracciata sotto:")
-canvas_cliente = st_canvas(height=150, width=300, drawing_mode="freedraw", stroke_width=2, key="firma_cliente_canvas")
+canvas_cliente = st_canvas(height=150, width=300, drawing_mode="freedraw", stroke_width=2, key="canvas_firma_cliente")
 
 if st.button("Genera PDF"):
     pdf = FPDF()
