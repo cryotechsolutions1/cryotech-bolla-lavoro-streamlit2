@@ -5,7 +5,6 @@ import os
 from streamlit_drawable_canvas import st_canvas
 from PIL import Image
 import io
-import base64
 
 st.title("Cryotech Solutions Srls - Bolla di Lavoro")
 
@@ -68,12 +67,12 @@ note = st.text_area("Note")
 st.header("Firma Tecnico")
 uploaded_firma_tecnico = st.file_uploader("Carica immagine firma tecnico", type=["png", "jpg"])
 st.text("Oppure firma tracciata sotto:")
-canvas_tecnico = st_canvas(height=150, width=300, drawing_mode="freedraw", stroke_width=2)
+canvas_tecnico = st_canvas(height=150, width=300, drawing_mode="freedraw", stroke_width=2, key="firma_tecnico_canvas")
 
 st.header("Firma Cliente")
 uploaded_firma_cliente = st.file_uploader("Carica immagine firma cliente", type=["png", "jpg"])
 st.text("Oppure firma tracciata sotto:")
-canvas_cliente = st_canvas(height=150, width=300, drawing_mode="freedraw", stroke_width=2)
+canvas_cliente = st_canvas(height=150, width=300, drawing_mode="freedraw", stroke_width=2, key="firma_cliente_canvas")
 
 if st.button("Genera PDF"):
     pdf = FPDF()
