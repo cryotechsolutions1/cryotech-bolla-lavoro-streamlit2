@@ -68,16 +68,15 @@ if st.button("Genera PDF"):
     pdf.ln(20)
     pdf.cell(200, 10, txt="Cryotech - Bolla di Lavoro", ln=True, align='C')
     pdf.ln(10)
-
     pdf.cell(200, 10, txt=f"NUMERO: {numero}", ln=True)
     pdf.cell(200, 10, txt=f"DATA: {data.strftime('%d/%m/%Y')}", ln=True)
     pdf.cell(200, 10, txt=f"DATI CLIENTE: {cliente}", ln=True)
-
     pdf.ln(10)
+
     pdf.cell(200, 10, txt="Operatori e Viaggi:", ln=True)
     for op in operatori:
         pdf.multi_cell(0, 10, txt=(
-            f"Nome: {op['nome']} - Inizio: {op['ora_inizio']} - Fine: {op['ora_fine']} - Pausa: {op['pausa']} min\\n"
+            f"Nome: {op['nome']} - Inizio: {op['ora_inizio']} - Fine: {op['ora_fine']} - Pausa: {op['pausa']} min\n"
             f"Viaggio Andata: {op['ore_andata']} h - {op['km_andata']} km | Ritorno: {op['ore_ritorno']} h - {op['km_ritorno']} km"
         ))
 
@@ -87,15 +86,15 @@ if st.button("Genera PDF"):
         pdf.multi_cell(0, 10, txt=f"Materiale: {mat['materiale']} - Quantità: {mat['quantita']}")
 
     pdf.ln(10)
-    pdf.multi_cell(0, 10, txt=f"NOTE:\\n{note}")
+    pdf.multi_cell(0, 10, txt=f"NOTE:\n{note}")
 
     pdf.ln(10)
     pdf.cell(200, 10, txt=f"FIRMA TECNICO: {firma_tecnico}", ln=True)
     pdf.cell(200, 10, txt=f"FIRMA E TIMBRO CLIENTE: {firma_cliente}", ln=True)
 
-    # Generazione PDF come bytes compatibile Streamlit
-pdf_bytes = pdf.output(dest="S").encode("latin1")
-pdf_output = io.BytesIO(pdf_bytes)
+    # ✅ CORRETTO: Generazione PDF come bytes compatibile Streamlit
+    pdf_bytes = pdf.output(dest="S").encode("latin1")
+    pdf_output = io.BytesIO(pdf_bytes)
 
     st.success("PDF generato con successo!")
 
