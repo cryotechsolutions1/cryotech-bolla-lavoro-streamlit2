@@ -3,7 +3,7 @@ from fpdf import FPDF
 import datetime
 import os
 
-st.title("Cryotech - Bolla di Lavoro")
+st.title("Cryotech Solutions Srls")
 
 numero = st.text_input("Numero")
 data = st.date_input("Data", datetime.date.today())
