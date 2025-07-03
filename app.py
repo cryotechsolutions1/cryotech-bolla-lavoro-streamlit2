@@ -85,23 +85,34 @@ for idx, op in enumerate(operatori_list):
             delta = datetime.datetime.combine(datetime.date.today(), ora_fine) - datetime.datetime.combine(datetime.date.today(), ora_inizio)
             totale = max(0, (delta.total_seconds() / 60) - pausa)
         st.text(f"Totale min: {totale}")
-    tot_ore_lavoro += totale
+    tot_ore_lavoro += totale / 60
     updated_operatori.append({"nome": nome, "inizio": ora_inizio, "fine": ora_fine, "pausa": pausa, "totale": totale})
 if st.button("Aggiungi Operatore"):
     updated_operatori.append({"nome": "", "inizio": None, "fine": None, "pausa": 0, "totale": 0})
 st.session_state["operatori_list"] = updated_operatori
-st.markdown(f"**Totale Minuti Lavoro: {tot_ore_lavoro}**")
+st.markdown(f"**Totale Ore Lavoro: {tot_ore_lavoro:.2f} ore**")
 st.markdown("</div>", unsafe_allow_html=True)
 
 # Viaggio Andata/Ritorno KM e Ore
-st.markdown("<div class='section'><h3>Viaggi</h3>", unsafe_allow_html=True)
-ore_andata = st.number_input("Ore Viaggio Andata", min_value=0.0, step=0.5)
-km_andata = st.number_input("KM Viaggio Andata", min_value=0, step=1)
-ore_ritorno = st.number_input("Ore Viaggio Ritorno", min_value=0.0, step=0.5)
-km_ritorno = st.number_input("KM Viaggio Ritorno", min_value=0, step=1)
-tot_viaggio_ore = ore_andata + ore_ritorno
-tot_viaggio_km = km_andata + km_ritorno
-st.text(f"Totale Ore Viaggio: {tot_viaggio_ore} | Totale KM Viaggio: {tot_viaggio_km}")
+st.markdown("<div class='section'><h3>Viaggi per Operatore</h3>", unsafe_allow_html=True)
+viaggi_list = st.session_state.get("viaggi_list", [])
+updated_viaggi = []
+for idx, viaggio in enumerate(viaggi_list):
+    col1, col2, col3, col4, col5 = st.columns(5)
+    with col1:
+        nome = st.text_input(f"Operatore Viaggio {idx+1}", viaggio.get("nome", ""), key=f"viaggio_nome_{idx}")
+    with col2:
+        ore_andata = st.number_input(f"Ore Andata {idx+1}", min_value=0.0, step=0.5, key=f"ore_andata_{idx}")
+    with col3:
+        km_andata = st.number_input(f"KM Andata {idx+1}", min_value=0, step=1, key=f"km_andata_{idx}")
+    with col4:
+        ore_ritorno = st.number_input(f"Ore Ritorno {idx+1}", min_value=0.0, step=0.5, key=f"ore_ritorno_{idx}")
+    with col5:
+        km_ritorno = st.number_input(f"KM Ritorno {idx+1}", min_value=0, step=1, key=f"km_ritorno_{idx}")
+    updated_viaggi.append({"nome": nome, "ore_andata": ore_andata, "km_andata": km_andata, "ore_ritorno": ore_ritorno, "km_ritorno": km_ritorno})
+if st.button("Aggiungi Viaggio"):
+    updated_viaggi.append({"nome": "", "ore_andata": 0.0, "km_andata": 0, "ore_ritorno": 0.0, "km_ritorno": 0})
+st.session_state["viaggi_list"] = updated_viaggi
 st.markdown("</div>", unsafe_allow_html=True)
 
 # Materiale con Quantità
@@ -126,7 +137,7 @@ note = st.text_area("NOTE")
 # Firma Tecnico e Cliente
 st.markdown("<div class='section'><h3>Firma Tecnico / Cliente</h3>", unsafe_allow_html=True)
 canvas_result = st_canvas(
-    fill_color="#FFFFFF",
+    fill_color=None,
     stroke_width=2,
     stroke_color="#000000",
     background_color="#FFFFFF",
@@ -158,13 +169,13 @@ def genera_pdf():
     pdf.ln(5)
     pdf.cell(200, 10, txt="Operatori:", ln=True)
     for op in updated_operatori:
-        pdf.multi_cell(0, 10, txt=f"{op['nome']} - Inizio: {op['inizio']} - Fine: {op['fine']} - Pausa: {op['pausa']} min - Totale: {op['totale']} min")
+        pdf.multi_cell(0, 10, txt=f"{op['nome']} - Inizio: {op['inizio']} - Fine: {op['fine']} - Pausa: {op['pausa']} min - Totale: {op['totale'] / 60:.2f} ore")
     pdf.ln(2)
-    pdf.cell(200, 10, txt=f"Totale Minuti Lavoro: {tot_ore_lavoro}", ln=True)
+    pdf.cell(200, 10, txt=f"Totale Ore Lavoro: {tot_ore_lavoro:.2f} ore", ln=True)
     pdf.ln(5)
-    pdf.cell(200, 10, txt=f"Viaggio Andata: {ore_andata} ore - {km_andata} km", ln=True)
-    pdf.cell(200, 10, txt=f"Viaggio Ritorno: {ore_ritorno} ore - {km_ritorno} km", ln=True)
-    pdf.cell(200, 10, txt=f"Totale Viaggio: {tot_viaggio_ore} ore - {tot_viaggio_km} km", ln=True)
+    pdf.cell(200, 10, txt="Viaggi per Operatore:", ln=True)
+for viaggio in updated_viaggi:
+    pdf.multi_cell(0, 10, txt=f"{viaggio['nome']} - Andata: {viaggio['ore_andata']} ore, {viaggio['km_andata']} km - Ritorno: {viaggio['ore_ritorno']} ore, {viaggio['km_ritorno']} km")
     pdf.ln(5)
     pdf.cell(200, 10, txt="Materiale Utilizzato:", ln=True)
     for m in updated_list:
