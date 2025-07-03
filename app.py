@@ -68,7 +68,6 @@ st.markdown("</div>", unsafe_allow_html=True)
 st.markdown("<div class='section'><h3>Tecnici e Tempi</h3>", unsafe_allow_html=True)
 operatori_list = st.session_state.get("operatori_list", [])
 updated_operatori = []
-tot_ore_lavoro = 0
 for idx, op in enumerate(operatori_list):
     col1, col2, col3, col4, col5 = st.columns(5)
     with col1:
@@ -85,12 +84,10 @@ for idx, op in enumerate(operatori_list):
             delta = datetime.datetime.combine(datetime.date.today(), ora_fine) - datetime.datetime.combine(datetime.date.today(), ora_inizio)
             totale = max(0, (delta.total_seconds() / 60) - pausa)
         st.text(f"Totale ore: {totale / 60:.2f}")
-    tot_ore_lavoro += totale / 60
     updated_operatori.append({"nome": nome, "inizio": ora_inizio, "fine": ora_fine, "pausa": pausa, "totale": totale})
 if st.button("Aggiungi Tecnico"):
     updated_operatori.append({"nome": "", "inizio": None, "fine": None, "pausa": 0, "totale": 0})
 st.session_state["operatori_list"] = updated_operatori
-st.markdown(f"**Totale Ore Lavoro: {tot_ore_lavoro:.2f} ore**")
 st.markdown("</div>", unsafe_allow_html=True)
 
 # Viaggio Andata/Ritorno KM e Ore
@@ -168,22 +165,4 @@ def genera_pdf():
     for viaggio in updated_viaggi:
         tot_viaggio_ore = viaggio['ore_andata'] + viaggio['ore_ritorno']
         tot_viaggio_km = viaggio['km_andata'] + viaggio['km_ritorno']
-        pdf.multi_cell(0, 10, txt=f"{viaggio['nome']} - Andata: {viaggio['ore_andata']} ore, {viaggio['km_andata']} km - Ritorno: {viaggio['ore_ritorno']} ore, {viaggio['km_ritorno']} km - Totale: {tot_viaggio_ore:.2f} ore, {tot_viaggio_km} km")
-    pdf.ln(5)
-    pdf.rect(10, pdf.get_y(), 190, 10)
-    pdf.cell(200, 10, txt="Materiale Utilizzato:", ln=True)
-    for m in updated_list:
-        pdf.cell(200, 10, txt=f"{m['descrizione']} - Quantità: {m['quantita']}", ln=True)
-    pdf.ln(5)
-    pdf.rect(10, pdf.get_y(), 190, 10)
-    pdf.cell(200, 10, txt="Note:", ln=True)
-    pdf.multi_cell(0, 10, note)
-    pdf.ln(10)
-
-    pdf.output("bolla_lavoro.pdf")
-
-# Bottone Download PDF
-if st.button("Genera PDF"):
-    genera_pdf()
-    with open("bolla_lavoro.pdf", "rb") as file:
-        st.download_button("Scarica PDF", file, file_name="bolla_lavoro.pdf")
+        pdf.multi_cell(0, 10, txt=f"{viaggio['nome']} - Andata: {viaggio['ore_andata']} ore, {viaggio['km_andata']} km - Ritorno: {viaggio['ore_ritorno']} ore, {viaggio['km
