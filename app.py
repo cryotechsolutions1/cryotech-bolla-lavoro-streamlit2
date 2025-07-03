@@ -64,7 +64,7 @@ st.markdown("<div class='section'><h3>LAVORAZIONI ESEGUITE</h3>", unsafe_allow_h
 lavorazioni = st.text_area("Descrizione Lavorazioni")
 st.markdown("</div>", unsafe_allow_html=True)
 
-# Tabella Tecnici: Nome - Ora Inizio - Ora Fine - Pausa - Totale
+# Manodopera Tecnico
 st.markdown("<div class='section'><h3>Manodopera Tecnico</h3>", unsafe_allow_html=True)
 operatori_list = st.session_state.get("operatori_list", [])
 updated_operatori = []
@@ -90,7 +90,7 @@ if st.button("Aggiungi Tecnico"):
 st.session_state["operatori_list"] = updated_operatori
 st.markdown("</div>", unsafe_allow_html=True)
 
-# Viaggio Andata/Ritorno KM e Ore
+# Viaggio
 st.markdown("<div class='section'><h3>Viaggio</h3>", unsafe_allow_html=True)
 viaggi_list = st.session_state.get("viaggi_list", [])
 updated_viaggi = []
@@ -112,7 +112,7 @@ if st.button("Aggiungi Viaggio"):
 st.session_state["viaggi_list"] = updated_viaggi
 st.markdown("</div>", unsafe_allow_html=True)
 
-# Materiale con Quantità
+# Materiale Utilizzato
 st.markdown("<div class='section'><h3>Materiale Utilizzato</h3>", unsafe_allow_html=True)
 materiale_list = st.session_state.get("materiale_list", [])
 updated_list = []
@@ -128,7 +128,7 @@ if st.button("Aggiungi Materiale"):
 st.session_state["materiale_list"] = updated_list
 st.markdown("</div>", unsafe_allow_html=True)
 
-# Note Finali
+# Note
 note = st.text_area("NOTE")
 
 # Firma Tecnico / Cliente
@@ -145,7 +145,7 @@ canvas_result = st_canvas(
 )
 st.markdown("</div>", unsafe_allow_html=True)
 
-# Funzione Genera PDF
+# Funzione genera PDF
 def genera_pdf():
     pdf = FPDF()
     pdf.add_page()
@@ -177,6 +177,4 @@ def genera_pdf():
     pdf.rect(10, pdf.get_y(), 190, 10)
     pdf.cell(200, 10, txt="Viaggio:", ln=True)
     for viaggio in updated_viaggi:
-        tot_viaggio_ore = viaggio['ore_andata'] + viaggio['ore_ritorno']
-        tot_viaggio_km = viaggio['km_andata'] + viaggio['km_ritorno']
-        pdf.multi_cell(0, 10, txt=f"{viaggio['nome']} - Andata: {viaggio['ore_andata']} ore, {viaggio['km_andata']} km - Ritorno: {viaggio['ore_ritorno']} ore, {viaggio['km_ritorno']} km
+        tot_viaggio_ore = viaggio['ore_andata'] + viaggio['ore_rit
