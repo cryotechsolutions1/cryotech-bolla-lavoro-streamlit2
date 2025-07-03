@@ -84,7 +84,7 @@ for idx, op in enumerate(operatori_list):
         if ora_inizio and ora_fine:
             delta = datetime.datetime.combine(datetime.date.today(), ora_fine) - datetime.datetime.combine(datetime.date.today(), ora_inizio)
             totale = max(0, (delta.total_seconds() / 60) - pausa)
-        st.text(f"Totale min: {totale}")
+        st.text(f"Totale ore: {totale / 60:.2f}")
     tot_ore_lavoro += totale / 60
     updated_operatori.append({"nome": nome, "inizio": ora_inizio, "fine": ora_fine, "pausa": pausa, "totale": totale})
 if st.button("Aggiungi Tecnico"):
@@ -155,7 +155,10 @@ def genera_pdf():
     pdf.add_page()
     pdf.set_font("Arial", size=12)
     try:
-        pdf.image("logo_cryotech.png", x=10, y=8, w=33)
+        logo = Image.open("logo_cryotech.png")
+        logo_path = "temp_logo.png"
+        logo.save(logo_path)
+        pdf.image(logo_path, x=10, y=8, w=33)
     except:
         pass
     pdf.cell(200, 10, txt="Cryotech Solutions Srls", ln=True, align="C")
@@ -171,7 +174,7 @@ def genera_pdf():
     for op in updated_operatori:
         pdf.multi_cell(0, 10, txt=f"{op['nome']} - Inizio: {op['inizio']} - Fine: {op['fine']} - Pausa: {op['pausa']} min - Totale: {op['totale'] / 60:.2f} ore")
     pdf.ln(2)
-    pdf.cell(200, 10, txt=f"Totale Ore Lavoro: {tot_ore_lavoro:.2f} ore", ln=True)
+    
     pdf.ln(5)
     pdf.cell(200, 10, txt="Viaggi per Tecnico:", ln=True)
     for viaggio in updated_viaggi:
