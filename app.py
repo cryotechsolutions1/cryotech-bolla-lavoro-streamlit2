@@ -64,8 +64,8 @@ st.markdown("<div class='section'><h3>LAVORAZIONI ESEGUITE</h3>", unsafe_allow_h
 lavorazioni = st.text_area("Descrizione Lavorazioni")
 st.markdown("</div>", unsafe_allow_html=True)
 
-# Tabella Operatori: Nome - Ora Inizio - Ora Fine - Pausa - Totale
-st.markdown("<div class='section'><h3>Operatori e Tempi</h3>", unsafe_allow_html=True)
+# Tabella Tecnici: Nome - Ora Inizio - Ora Fine - Pausa - Totale
+st.markdown("<div class='section'><h3>Tecnici e Tempi</h3>", unsafe_allow_html=True)
 operatori_list = st.session_state.get("operatori_list", [])
 updated_operatori = []
 tot_ore_lavoro = 0
@@ -87,20 +87,20 @@ for idx, op in enumerate(operatori_list):
         st.text(f"Totale min: {totale}")
     tot_ore_lavoro += totale / 60
     updated_operatori.append({"nome": nome, "inizio": ora_inizio, "fine": ora_fine, "pausa": pausa, "totale": totale})
-if st.button("Aggiungi Operatore"):
+if st.button("Aggiungi Tecnico"):
     updated_operatori.append({"nome": "", "inizio": None, "fine": None, "pausa": 0, "totale": 0})
 st.session_state["operatori_list"] = updated_operatori
 st.markdown(f"**Totale Ore Lavoro: {tot_ore_lavoro:.2f} ore**")
 st.markdown("</div>", unsafe_allow_html=True)
 
 # Viaggio Andata/Ritorno KM e Ore
-st.markdown("<div class='section'><h3>Viaggi per Operatore</h3>", unsafe_allow_html=True)
+st.markdown("<div class='section'><h3>Viaggi per Tecnico</h3>", unsafe_allow_html=True)
 viaggi_list = st.session_state.get("viaggi_list", [])
 updated_viaggi = []
 for idx, viaggio in enumerate(viaggi_list):
     col1, col2, col3, col4, col5 = st.columns(5)
     with col1:
-        nome = st.text_input(f"Operatore Viaggio {idx+1}", viaggio.get("nome", ""), key=f"viaggio_nome_{idx}")
+        nome = st.text_input(f"Tecnico Viaggio {idx+1}", viaggio.get("nome", ""), key=f"viaggio_nome_{idx}")
     with col2:
         ore_andata = st.number_input(f"Ore Andata {idx+1}", min_value=0.0, step=0.5, key=f"ore_andata_{idx}")
     with col3:
@@ -167,15 +167,16 @@ def genera_pdf():
     pdf.cell(200, 10, txt="Lavorazioni Eseguite:", ln=True)
     pdf.multi_cell(0, 10, lavorazioni)
     pdf.ln(5)
-    pdf.cell(200, 10, txt="Operatori:", ln=True)
+    pdf.cell(200, 10, txt="Tecnici:", ln=True)
     for op in updated_operatori:
         pdf.multi_cell(0, 10, txt=f"{op['nome']} - Inizio: {op['inizio']} - Fine: {op['fine']} - Pausa: {op['pausa']} min - Totale: {op['totale'] / 60:.2f} ore")
     pdf.ln(2)
     pdf.cell(200, 10, txt=f"Totale Ore Lavoro: {tot_ore_lavoro:.2f} ore", ln=True)
     pdf.ln(5)
-    pdf.cell(200, 10, txt="Viaggi per Operatore:", ln=True)
-for viaggio in updated_viaggi:
-    pdf.multi_cell(0, 10, txt=f"{viaggio['nome']} - Andata: {viaggio['ore_andata']} ore, {viaggio['km_andata']} km - Ritorno: {viaggio['ore_ritorno']} ore, {viaggio['km_ritorno']} km")
+    pdf.cell(200, 10, txt="Viaggi per Tecnico:", ln=True)
+pdf.cell(200, 10, txt="Viaggi per Tecnico:", ln=True)
+    for viaggio in updated_viaggi:
+        pdf.multi_cell(0, 10, txt=f"{viaggio['nome']} - Andata: {viaggio['ore_andata']} ore, {viaggio['km_andata']} km - Ritorno: {viaggio['ore_ritorno']} ore, {viaggio['km_ritorno']} km")
     pdf.ln(5)
     pdf.cell(200, 10, txt="Materiale Utilizzato:", ln=True)
     for m in updated_list:
