@@ -165,4 +165,13 @@ def genera_pdf():
     for viaggio in updated_viaggi:
         tot_viaggio_ore = viaggio['ore_andata'] + viaggio['ore_ritorno']
         tot_viaggio_km = viaggio['km_andata'] + viaggio['km_ritorno']
-        pdf.multi_cell(0, 10, txt=f"{viaggio['nome']} - Andata: {viaggio['ore_andata']} ore, {viaggio['km_andata']}
+        pdf.multi_cell(0, 10, txt=f"{viaggio['nome']} - Andata: {viaggio['ore_andata']} ore, {viaggio['km_andata']} km - Ritorno: {viaggio['ore_ritorno']} ore, {viaggio['km_ritorno']} km - Totale: {tot_viaggio_ore:.2f} ore, {tot_viaggio_km} km")
+    pdf.ln(5)
+    pdf.rect(10, pdf.get_y(), 190, 10)
+    pdf.cell(200, 10, txt="Materiale Utilizzato:", ln=True)
+    for m in updated_list:
+        pdf.cell(200, 10, txt=f"{m['descrizione']} - Quantità: {m['quantita']}", ln=True)
+    pdf.ln(5)
+    pdf.rect(10, pdf.get_y(), 190, 10)
+    pdf.cell(200, 10, txt="Note:", ln=True)
+    pdf.multi_cell(0, 10
