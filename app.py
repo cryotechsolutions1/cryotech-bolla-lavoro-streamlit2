@@ -149,28 +149,23 @@ canvas_result = st_canvas(
 st.markdown("</div>", unsafe_allow_html=True)
 
 # Funzione Genera PDF
-
 def genera_pdf():
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font("Arial", size=12)
-  try:
-    logo = Image.open("logo_cryotech.png")
-    logo_path = "temp_logo.png"
-    logo.save(logo_path)
-    pdf.image(logo_path, x=10, y=8, w=33)
-    pdf.set_font("Arial", style="B", size=14)
-    pdf.set_xy(120, 8)
-    pdf.set_font("Arial", style="B", size=10)
-    pdf.multi_cell(80, 6, txt=f"NUMERO: {numero_intervento}\nDATA: {data_intervento}\nCLIENTE: {cliente}", align="R")
-except:
-    pass
+    try:
+        logo = Image.open("logo_cryotech.png")
+        logo_path = "temp_logo.png"
+        logo.save(logo_path)
+        pdf.image(logo_path, x=10, y=8, w=33)
+        pdf.set_font("Arial", style="B", size=14)
+        pdf.set_xy(120, 8)
+        pdf.set_font("Arial", style="B", size=10)
+        pdf.multi_cell(80, 6, txt=f"NUMERO: {numero_intervento}\nDATA: {data_intervento}\nCLIENTE: {cliente}", align="R")
+    except:
+        pass
 
-      
-    
-    
     pdf.ln(5)
-    
     pdf.rect(10, pdf.get_y(), 190, 20)
     pdf.cell(200, 10, txt="Lavorazioni Eseguite:", ln=True)
     pdf.multi_cell(0, 10, lavorazioni)
@@ -180,7 +175,7 @@ except:
     for op in updated_operatori:
         pdf.multi_cell(0, 10, txt=f"{op['nome']} - Inizio: {op['inizio']} - Fine: {op['fine']} - Pausa: {op['pausa']} min - Totale: {op['totale'] / 60:.2f} ore")
     pdf.ln(2)
-    
+
     pdf.ln(5)
     pdf.rect(10, pdf.get_y(), 190, 10)
     pdf.cell(200, 10, txt="Viaggi per Tecnico:", ln=True)
