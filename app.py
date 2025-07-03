@@ -144,7 +144,7 @@ def genera_pdf():
         pdf.set_font("Arial", style="B", size=14)
         pdf.set_xy(120, 8)
         pdf.set_font("Arial", style="B", size=10)
-        pdf.multi_cell(80, 6, txt=f"NUMERO: {numero_intervento}\nDATA: {data_intervento}\nCLIENTE: {cliente}", align="R")
+        pdf.multi_cell(80, 6, txt=f"NUMERO: {numero_intervento}\nDATA: {data_intervento.strftime('%d/%m/%Y')}\nCLIENTE: {cliente}", align="R")
     except:
         pass
 
@@ -165,22 +165,4 @@ def genera_pdf():
     for viaggio in updated_viaggi:
         tot_viaggio_ore = viaggio['ore_andata'] + viaggio['ore_ritorno']
         tot_viaggio_km = viaggio['km_andata'] + viaggio['km_ritorno']
-        pdf.multi_cell(0, 10, txt=f"{viaggio['nome']} - Andata: {viaggio['ore_andata']} ore, {viaggio['km_andata']} km - Ritorno: {viaggio['ore_ritorno']} ore, {viaggio['km_ritorno']} km - Totale: {tot_viaggio_ore:.2f} ore, {tot_viaggio_km} km")
-    pdf.ln(5)
-    pdf.rect(10, pdf.get_y(), 190, 10)
-    pdf.cell(200, 10, txt="Materiale Utilizzato:", ln=True)
-    for m in updated_list:
-        pdf.cell(200, 10, txt=f"{m['descrizione']} - Quantità: {m['quantita']}", ln=True)
-    pdf.ln(5)
-    pdf.rect(10, pdf.get_y(), 190, 10)
-    pdf.cell(200, 10, txt="Note:", ln=True)
-    pdf.multi_cell(0, 10, note)
-    pdf.ln(10)
-
-    pdf.output("bolla_lavoro.pdf")
-
-# Bottone Download PDF
-if st.button("Genera PDF"):
-    genera_pdf()
-    with open("bolla_lavoro.pdf", "rb") as file:
-        st.download_button("Scarica PDF", file, file_name="bolla_lavoro.pdf")
+        pdf.multi_cell(0, 10, txt=f"{viaggio['nome']} - Andata: {viaggio['ore_andata']} ore, {viaggio['km_andata']}
