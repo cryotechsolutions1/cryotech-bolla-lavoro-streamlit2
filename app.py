@@ -49,7 +49,7 @@ st.markdown("""
 col1, col2 = st.columns([0.15, 0.85])
 with col1:
     logo = Image.open("logo_cryotech.png")
-    st.image(logo, use_column_width=True)
+    st.image(logo, use_container_width=True)
 with col2:
     st.markdown("""<div class='cryotech-header'><h1>Cryotech Solutions Srls</h1></div>""", unsafe_allow_html=True)
 
