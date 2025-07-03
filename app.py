@@ -177,4 +177,35 @@ def genera_pdf():
     pdf.rect(10, pdf.get_y(), 190, 10)
     pdf.cell(200, 10, txt="Viaggio:", ln=True)
     for viaggio in updated_viaggi:
-        tot_viaggio_ore = viaggio['ore_andata'] + viaggio['ore_rit
+        tot_viaggio_ore = viaggio['ore_andata'] + viaggio['ore_ritorno']
+        tot_viaggio_km = viaggio['km_andata'] + viaggio['km_ritorno']
+        pdf.multi_cell(0, 10, txt=f"{viaggio['nome']} - Andata: {viaggio['ore_andata']} ore, {viaggio['km_andata']} km - Ritorno: {viaggio['ore_ritorno']} ore, {viaggio['km_ritorno']} km - Totale: {tot_viaggio_ore:.2f} ore, {tot_viaggio_km} km")
+    pdf.ln(5)
+    pdf.rect(10, pdf.get_y(), 190, 10)
+    pdf.cell(200, 10, txt="Materiale Utilizzato:", ln=True)
+    for m in updated_list:
+        pdf.cell(200, 10, txt=f"{m['descrizione']} - Quantità: {m['quantita']}", ln=True)
+    pdf.ln(5)
+    pdf.rect(10, pdf.get_y(), 190, 10)
+    pdf.cell(200, 10, txt="Note:", ln=True)
+    pdf.multi_cell(0, 10, note)
+    pdf.ln(10)
+
+    # Firma senza sfondo nero
+    if canvas_result.image_data is not None:
+        firma_img = Image.fromarray((canvas_result.image_data[:, :, :3] * 255).astype(np.uint8))
+        white_bg = Image.new("RGB", firma_img.size, (255, 255, 255))
+        white_bg.paste(firma_img)
+        firma_path = "firma.png"
+        white_bg.save(firma_path)
+        y_pos = pdf.get_y()
+        pdf.rect(10, y_pos, 60, 30, 'F')
+        pdf.image(firma_path, x=10, y=y_pos, w=60)
+
+    pdf.output("bolla_lavoro.pdf")
+
+# Bottone genera PDF
+if st.button("Genera PDF"):
+    genera_pdf()
+    with open("bolla_lavoro.pdf", "rb") as file:
+        st.download_button("Scarica PDF", file, file_name="bolla_lavoro.pdf")
