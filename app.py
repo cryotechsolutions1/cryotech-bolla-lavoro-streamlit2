@@ -162,11 +162,10 @@ def genera_pdf():
         pdf.set_font("Arial", style="B", size=14)
         pdf.set_xy(120, 8)
         pdf.set_font("Arial", style="B", size=10)
-        pdf.multi_cell(80, 6, txt=f"NUMERO: {numero_intervento}
+pdf.multi_cell(80, 6, txt=f"NUMERO: {numero_intervento}
 DATA: {data_intervento}
 CLIENTE: {cliente}", align="R")
-    except:
-        pass
+      
     
     
     pdf.ln(5)
