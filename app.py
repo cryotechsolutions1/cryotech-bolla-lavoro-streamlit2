@@ -159,38 +159,53 @@ def genera_pdf():
         logo_path = "temp_logo.png"
         logo.save(logo_path)
         pdf.image(logo_path, x=10, y=8, w=33)
+        pdf.set_font("Arial", style="B", size=14)
+        pdf.set_xy(120, 8)
+        pdf.set_font("Arial", style="B", size=10)
+        pdf.multi_cell(80, 6, txt=f"NUMERO: {numero_intervento}
+DATA: {data_intervento}
+CLIENTE: {cliente}", align="R")
     except:
         pass
-    pdf.cell(200, 10, txt="Cryotech Solutions Srls", ln=True, align="C")
-    pdf.ln(15)
-    pdf.cell(200, 10, txt=f"Numero: {numero_intervento}", ln=True)
-    pdf.cell(200, 10, txt=f"Data: {data_intervento}", ln=True)
-    pdf.cell(200, 10, txt=f"Cliente: {cliente}", ln=True)
+    
+    
     pdf.ln(5)
+    
+    pdf.rect(10, pdf.get_y(), 190, 20)
     pdf.cell(200, 10, txt="Lavorazioni Eseguite:", ln=True)
     pdf.multi_cell(0, 10, lavorazioni)
     pdf.ln(5)
+    pdf.rect(10, pdf.get_y(), 190, 10)
     pdf.cell(200, 10, txt="Tecnici:", ln=True)
     for op in updated_operatori:
         pdf.multi_cell(0, 10, txt=f"{op['nome']} - Inizio: {op['inizio']} - Fine: {op['fine']} - Pausa: {op['pausa']} min - Totale: {op['totale'] / 60:.2f} ore")
     pdf.ln(2)
     
     pdf.ln(5)
+    pdf.rect(10, pdf.get_y(), 190, 10)
     pdf.cell(200, 10, txt="Viaggi per Tecnico:", ln=True)
     for viaggio in updated_viaggi:
-        pdf.multi_cell(0, 10, txt=f"{viaggio['nome']} - Andata: {viaggio['ore_andata']} ore, {viaggio['km_andata']} km - Ritorno: {viaggio['ore_ritorno']} ore, {viaggio['km_ritorno']} km")
+        tot_viaggio_ore = viaggio['ore_andata'] + viaggio['ore_ritorno']
+        tot_viaggio_km = viaggio['km_andata'] + viaggio['km_ritorno']
+        pdf.multi_cell(0, 10, txt=f"{viaggio['nome']} - Andata: {viaggio['ore_andata']} ore, {viaggio['km_andata']} km - Ritorno: {viaggio['ore_ritorno']} ore, {viaggio['km_ritorno']} km - Totale: {tot_viaggio_ore:.2f} ore, {tot_viaggio_km} km")
     pdf.ln(5)
+    pdf.rect(10, pdf.get_y(), 190, 10)
     pdf.cell(200, 10, txt="Materiale Utilizzato:", ln=True)
     for m in updated_list:
         pdf.cell(200, 10, txt=f"{m['descrizione']} - Quantità: {m['quantita']}", ln=True)
     pdf.ln(5)
+    pdf.rect(10, pdf.get_y(), 190, 10)
     pdf.cell(200, 10, txt="Note:", ln=True)
     pdf.multi_cell(0, 10, note)
     pdf.ln(10)
     if canvas_result.image_data is not None:
         firma_img = Image.fromarray((canvas_result.image_data[:, :, :3] * 255).astype(np.uint8))
-        firma_img.save("firma.png")
-        pdf.image("firma.png", x=10, y=pdf.get_y(), w=60)
+        firma_path = "firma.png"
+        firma_img.save(firma_path)
+        pdf.set_fill_color(255, 255, 255)
+        y_pos = pdf.get_y()
+        pdf.rect(10, y_pos, 60, 30, 'F')  # sfondo bianco dietro la firma
+        pdf.image(firma_path, x=10, y=y_pos, w=60)
     pdf.output("bolla_lavoro.pdf")
 
 # Bottone Download PDF
