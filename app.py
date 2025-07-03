@@ -1,9 +1,7 @@
 import streamlit as st
 from PIL import Image
-from streamlit_drawable_canvas import st_canvas
 from fpdf import FPDF
 import datetime
-import numpy as np
 
 st.set_page_config(page_title="Cryotech bolla di lavoro", layout="centered")
 
@@ -131,20 +129,6 @@ st.markdown("</div>", unsafe_allow_html=True)
 # Note
 note = st.text_area("NOTE")
 
-# Firma Tecnico / Cliente
-st.markdown("<div class='section'><h3>Firma Tecnico / Cliente</h3>", unsafe_allow_html=True)
-canvas_result = st_canvas(
-    fill_color=None,
-    stroke_width=2,
-    stroke_color="#000000",
-    background_color="#FFFFFF",
-    update_streamlit=True,
-    height=150,
-    drawing_mode="freedraw",
-    key="canvas",
-)
-st.markdown("</div>", unsafe_allow_html=True)
-
 # Funzione genera PDF
 def genera_pdf():
     pdf = FPDF()
@@ -191,16 +175,11 @@ def genera_pdf():
     pdf.multi_cell(0, 10, note)
     pdf.ln(10)
 
-    # Firma senza sfondo nero
-    if canvas_result.image_data is not None:
-        firma_img = Image.fromarray((canvas_result.image_data[:, :, :3] * 255).astype(np.uint8))
-        white_bg = Image.new("RGB", firma_img.size, (255, 255, 255))
-        white_bg.paste(firma_img)
-        firma_path = "firma.png"
-        white_bg.save(firma_path)
-        y_pos = pdf.get_y()
-        pdf.rect(10, y_pos, 60, 30, 'F')
-        pdf.image(firma_path, x=10, y=y_pos, w=60)
+    # Timbro aziendale in fondo pagina
+    try:
+        pdf.image("timbro_cryotech.png", x=150, y=270, w=40)
+    except:
+        pass
 
     pdf.output("bolla_lavoro.pdf")
 
