@@ -65,7 +65,7 @@ lavorazioni = st.text_area("Descrizione Lavorazioni")
 st.markdown("</div>", unsafe_allow_html=True)
 
 # Tabella Tecnici: Nome - Ora Inizio - Ora Fine - Pausa - Totale
-st.markdown("<div class='section'><h3>Tecnici e Tempi</h3>", unsafe_allow_html=True)
+st.markdown("<div class='section'><h3>Manodopera Tecnico</h3>", unsafe_allow_html=True)
 operatori_list = st.session_state.get("operatori_list", [])
 updated_operatori = []
 for idx, op in enumerate(operatori_list):
@@ -91,7 +91,7 @@ st.session_state["operatori_list"] = updated_operatori
 st.markdown("</div>", unsafe_allow_html=True)
 
 # Viaggio Andata/Ritorno KM e Ore
-st.markdown("<div class='section'><h3>Viaggi per Tecnico</h3>", unsafe_allow_html=True)
+st.markdown("<div class='section'><h3>Viaggio</h3>", unsafe_allow_html=True)
 viaggi_list = st.session_state.get("viaggi_list", [])
 updated_viaggi = []
 for idx, viaggio in enumerate(viaggi_list):
@@ -154,14 +154,14 @@ def genera_pdf():
     pdf.multi_cell(0, 10, lavorazioni)
     pdf.ln(5)
     pdf.rect(10, pdf.get_y(), 190, 10)
-    pdf.cell(200, 10, txt="Tecnici:", ln=True)
+    pdf.cell(200, 10, txt="Manodopera Tecnico:", ln=True)
     for op in updated_operatori:
         pdf.multi_cell(0, 10, txt=f"{op['nome']} - Inizio: {op['inizio']} - Fine: {op['fine']} - Pausa: {op['pausa']} min - Totale: {op['totale'] / 60:.2f} ore")
     pdf.ln(2)
 
     pdf.ln(5)
     pdf.rect(10, pdf.get_y(), 190, 10)
-    pdf.cell(200, 10, txt="Viaggi per Tecnico:", ln=True)
+    pdf.cell(200, 10, txt="Viaggio:", ln=True)
     for viaggio in updated_viaggi:
         tot_viaggio_ore = viaggio['ore_andata'] + viaggio['ore_ritorno']
         tot_viaggio_km = viaggio['km_andata'] + viaggio['km_ritorno']
