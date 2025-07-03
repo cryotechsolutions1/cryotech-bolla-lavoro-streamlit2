@@ -134,20 +134,6 @@ st.markdown("</div>", unsafe_allow_html=True)
 # Note Finali
 note = st.text_area("NOTE")
 
-# Firma Tecnico e Cliente
-st.markdown("<div class='section'><h3>Firma Tecnico / Cliente</h3>", unsafe_allow_html=True)
-canvas_result = st_canvas(
-    fill_color=None,
-    stroke_width=2,
-    stroke_color="#000000",
-    background_color="#FFFFFF",
-    update_streamlit=True,
-    height=150,
-    drawing_mode="freedraw",
-    key="canvas",
-)
-st.markdown("</div>", unsafe_allow_html=True)
-
 # Funzione Genera PDF
 def genera_pdf():
     pdf = FPDF()
@@ -193,14 +179,7 @@ def genera_pdf():
     pdf.cell(200, 10, txt="Note:", ln=True)
     pdf.multi_cell(0, 10, note)
     pdf.ln(10)
-    if canvas_result.image_data is not None:
-        firma_img = Image.fromarray((canvas_result.image_data[:, :, :3] * 255).astype(np.uint8))
-        firma_path = "firma.png"
-        firma_img.save(firma_path)
-        pdf.set_fill_color(255, 255, 255)
-        y_pos = pdf.get_y()
-        pdf.rect(10, y_pos, 60, 30, 'F')  # sfondo bianco dietro la firma
-        pdf.image(firma_path, x=10, y=y_pos, w=60)
+
     pdf.output("bolla_lavoro.pdf")
 
 # Bottone Download PDF
