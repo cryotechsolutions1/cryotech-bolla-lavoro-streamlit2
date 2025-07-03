@@ -174,7 +174,6 @@ def genera_pdf():
     pdf.cell(200, 10, txt=f"Totale Ore Lavoro: {tot_ore_lavoro:.2f} ore", ln=True)
     pdf.ln(5)
     pdf.cell(200, 10, txt="Viaggi per Tecnico:", ln=True)
-pdf.cell(200, 10, txt="Viaggi per Tecnico:", ln=True)
     for viaggio in updated_viaggi:
         pdf.multi_cell(0, 10, txt=f"{viaggio['nome']} - Andata: {viaggio['ore_andata']} ore, {viaggio['km_andata']} km - Ritorno: {viaggio['ore_ritorno']} ore, {viaggio['km_ritorno']} km")
     pdf.ln(5)
